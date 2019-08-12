@@ -15,12 +15,12 @@ QT_CHARTS_USE_NAMESPACE
 class Chart : public QChart {
 
 public:
-    explicit Chart(QGraphicsItem *parent = 0, Qt::WindowFlags windowFlags = nullptr);
+    explicit Chart(QGraphicsItem *parent = nullptr, Qt::WindowFlags windowFlags = nullptr);
 
-    ~Chart();
+    ~Chart() override;
 
 protected:
-    bool sceneEvent(QEvent *event);
+    bool sceneEvent(QEvent *event) override;
 
 private:
     bool gestureEvent(QGestureEvent *event);
