@@ -13,8 +13,8 @@ find_package(Qt5Core REQUIRED)
 find_package(Qt5Widgets REQUIRED)
 find_package(Qt5Charts REQUIRED)
 
-qt5_wrap_ui(UI_HEADERS mainwindow.ui)
-add_executable(NewtonSystem main.cpp ${UI_HEADERS} mainwindow.h mainwindow.cpp chartview.cpp chartview.h chart.cpp chart.h)
+qt5_wrap_ui(UI_HEADERS src/mainwindow/mainwindow.ui)
+add_executable(NewtonSystem src/main.cpp ${UI_HEADERS} src/mainwindow/mainwindow.h src/mainwindow/mainwindow.cpp src/chartview/chartview.cpp src/chartview/chartview.h src/chart/chart.cpp src/chart/chart.h)
 
 target_link_libraries(NewtonSystem Qt5::Core)
 target_link_libraries(NewtonSystem Qt5::Widgets)
