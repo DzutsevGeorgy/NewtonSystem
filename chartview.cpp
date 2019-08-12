@@ -24,7 +24,7 @@ void ChartView::mousePressEvent(QMouseEvent *event) {
 
 void ChartView::mouseMoveEvent(QMouseEvent *event) {
     if (m_isTouching) return;
-    QChartView::mouseMoveEvent(event)
+    QChartView::mouseMoveEvent(event);
 }
 
 void ChartView::mouseReleaseEvent(QMouseEvent *event) {
