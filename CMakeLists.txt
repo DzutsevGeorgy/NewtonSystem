@@ -14,7 +14,7 @@ find_package(Qt5Widgets REQUIRED)
 find_package(Qt5Charts REQUIRED)
 
 qt5_wrap_ui(UI_HEADERS mainwindow.ui)
-add_executable(NewtonSystem main.cpp ${UI_HEADERS} mainwindow.h mainwindow.cpp chartview.cpp chartview.h)
+add_executable(NewtonSystem main.cpp ${UI_HEADERS} mainwindow.h mainwindow.cpp chartview.cpp chartview.h chart.cpp chart.h)
 
 target_link_libraries(NewtonSystem Qt5::Core)
 target_link_libraries(NewtonSystem Qt5::Widgets)
