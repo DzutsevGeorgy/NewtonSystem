@@ -195,19 +195,6 @@
       </property>
      </widget>
     </item>
-    <item row="10" column="0">
-     <widget class="QTextEdit" name="textEdit">
-      <property name="verticalScrollBarPolicy">
-       <enum>Qt::ScrollBarAsNeeded</enum>
-      </property>
-      <property name="horizontalScrollBarPolicy">
-       <enum>Qt::ScrollBarAsNeeded</enum>
-      </property>
-      <property name="sizeAdjustPolicy">
-       <enum>QAbstractScrollArea::AdjustToContents</enum>
-      </property>
-     </widget>
-    </item>
     <item row="1" column="2" rowspan="10">
      <widget class="Line" name="line">
       <property name="orientation">
@@ -255,6 +242,19 @@
       </item>
      </layout>
     </item>
+    <item row="8" column="0" rowspan="3">
+     <widget class="QTextEdit" name="textEdit">
+      <property name="verticalScrollBarPolicy">
+       <enum>Qt::ScrollBarAsNeeded</enum>
+      </property>
+      <property name="horizontalScrollBarPolicy">
+       <enum>Qt::ScrollBarAsNeeded</enum>
+      </property>
+      <property name="sizeAdjustPolicy">
+       <enum>QAbstractScrollArea::AdjustToContents</enum>
+      </property>
+     </widget>
+    </item>
    </layout>
   </widget>
   <widget class="QMenuBar" name="menubar">
@@ -266,8 +266,33 @@
      <height>21</height>
     </rect>
    </property>
+   <widget class="QMenu" name="menu">
+    <property name="title">
+     <string>Помощь</string>
+    </property>
+    <addaction name="help"/>
+    <addaction name="separator"/>
+    <addaction name="file"/>
+    <addaction name="app"/>
+   </widget>
+   <addaction name="menu"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
+  <action name="help">
+   <property name="text">
+    <string>Справка</string>
+   </property>
+  </action>
+  <action name="file">
+   <property name="text">
+    <string>О Файле</string>
+   </property>
+  </action>
+  <action name="app">
+   <property name="text">
+    <string>О Приложении</string>
+   </property>
+  </action>
  </widget>
  <resources/>
  <connections/>

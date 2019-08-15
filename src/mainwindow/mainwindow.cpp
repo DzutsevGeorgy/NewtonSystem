@@ -9,8 +9,37 @@ QT_CHARTS_USE_NAMESPACE
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWindow) {
     ui->setupUi(this);
     connect(ui->solveButton, SIGNAL(clicked()), this, SLOT(solve()));
+    connect(ui->loadButton, SIGNAL(clicked()), this, SLOT(load()));
+    connect(ui->saveButton, SIGNAL(clicked()), this, SLOT(save()));
+    connect(ui->app, SIGNAL(triggered()), this, SLOT(app()));
+    connect(ui->help, SIGNAL(triggered()), this, SLOT(help()));
+    connect(ui->file, SIGNAL(triggered()), this, SLOT(file()));
     make_chart();
-    //calculate_result(0.5, 0.4, 0.0001);
+}
+
+void MainWindow::load() {
+    std::ifstream file("result.html");
+    if (file.is_open()) {
+        is_file_opened = true;
+        stat("result.html", &file_info);
+        std::string html, line;
+        while (std::getline(file, line)) { html.append(line); }
+        set_html(ui->textEdit, QString::fromStdString(html));
+    } else {
+        make_msg_box("Не найден файл \"result.html\"");
+    }
+}
+
+void MainWindow::save() {
+    auto doc = ui->textEdit->document();
+    std::ofstream file("result.html");
+    if (file.is_open() && !doc->isEmpty()) {
+        file << doc->toHtml().toStdString();
+        file.close();
+        make_msg_box("Решение сохранено в файл \"result.html\"");
+    } else {
+        make_msg_box("Решение отсутствует!");
+    }
 }
 
 void MainWindow::solve() {

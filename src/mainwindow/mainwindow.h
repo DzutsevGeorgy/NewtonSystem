@@ -12,6 +12,8 @@
 #include <QTextEdit>
 #include <QMessageBox>
 #include <QtConcurrent/QtConcurrent>
+#include <fstream>
+#include <ctime>
 
 namespace Ui {
     class MainWindow;
@@ -29,8 +31,34 @@ private slots:
 
     void solve();
 
+    void load();
+
+    void save();
+
+    static void app() {
+        make_msg_box("Программа для решения системы уравнений методом Ньютона.\nАвтор: Дзуцев Георгий\nГруппа: ИСп-12");
+    }
+
+    static void help() {
+        make_msg_box("");
+    }
+
+    void file() {
+        if (is_file_opened) {
+            auto created = QString::fromStdString(formatted_time(file_info.st_ctime));
+            auto modified = QString::fromStdString(formatted_time(file_info.st_mtime));
+            make_msg_box(QString("Файл создан: %1\nФайл изменен: %2\nРазмер файла: %3 байт")
+                                 .arg(created, modified,
+                                      QString::number(file_info.st_size)));
+        } else {
+            make_msg_box("Нет информации о файле!");
+        }
+    }
+
 private:
     Ui::MainWindow *ui;
+    bool is_file_opened = false;
+    struct stat file_info = {};
 
     void calculate_result(double x, double y, double eps);
 
@@ -110,6 +138,13 @@ private:
                 edit->setDocument(doc);
             });
         });
+    }
+
+    static std::string formatted_time(time_t timestamp) {
+        char buf[80];
+        tm *tm = std::localtime(&timestamp);
+        std::strftime(buf, sizeof(buf), "%d/%m/%Y %H:%M:%S", tm);
+        return buf;
     }
 
 };
