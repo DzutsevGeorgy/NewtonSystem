@@ -5,6 +5,13 @@
 
 #include <QMainWindow>
 #include <cmath>
+#include "../chart/chart.h"
+#include "../chartview/chartview.h"
+#include <QtCharts/QSplineSeries>
+#include <QtCharts/QValueAxis>
+#include <QTextEdit>
+#include <QMessageBox>
+#include <QtConcurrent/QtConcurrent>
 
 namespace Ui {
     class MainWindow;
@@ -18,8 +25,28 @@ public:
 
     ~MainWindow() override;
 
+private slots:
+
+    void solve();
+
 private:
     Ui::MainWindow *ui;
+
+    void calculate_result(double x, double y, double eps);
+
+    void make_chart();
+
+    static void make_msg_box(const QString &message) {
+        QMessageBox msg_box;
+        msg_box.setText(message);
+        msg_box.exec();
+    }
+
+    static QString build_line(int i, double x, double y, double dx, double dy, double norm) {
+        char buf[80];
+        int res = snprintf(buf, sizeof(buf), "\t%d\t||\t%f\t||\t%f\t||\t%f\t||\t%f\t||\t%f\t\n", i, x, y, dx, dy, norm);
+        return QString(buf);
+    }
 
     static double fun1(double x, double y) {
         return sin(y + 0.5) - x - 1;
@@ -54,4 +81,35 @@ private:
         matrix[0][1] = -matrix[0][1] / det;
         matrix[1][0] = -matrix[1][0] / det;
     }
+
+    template<typename It, typename F>
+    QString add_table_row(It begin, It end, int columns, F &&format) {
+        if (begin == end) return QString();
+        QString output = "";
+        int n = 0;
+        do {
+            if (!n) output += "<tr>";
+            output += "<td align=\"center\">" + format(*begin) + "</td>";
+            if (++n == columns) {
+                n = 0;
+                output += "</tr>";
+            }
+            ++begin;
+        } while (begin != end);
+        return output;
+    }
+
+    static void set_html(QTextEdit *edit, const QString &html) {
+        QtConcurrent::run([=] {
+            auto doc = new QTextDocument;
+            doc->setHtml(html);
+            doc->moveToThread(edit->thread());
+            QObject src;
+            QObject::connect(&src, &QObject::destroyed, qApp, [=] {
+                doc->setParent(edit);
+                edit->setDocument(doc);
+            });
+        });
+    }
+
 };
