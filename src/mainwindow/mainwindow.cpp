@@ -83,9 +83,12 @@ void MainWindow::make_chart() {
 
 void MainWindow::calculate_result(double x, double y, double eps) {
     int i{0};
-    double matrix[2][2], dx, dy, result[2], norm;
+    double matrix[2][2], dx, dy, result[2], norm, x0, y0;
     QString text;
+    int precision = abs(static_cast<int>(log10(eps))) + 1;
     do {
+        x0 = x;
+        y0 = y;
         matrix[0][0] = der1_x(x, y);
         matrix[0][1] = der1_y(x, y);
         matrix[1][0] = der2_x(x, y);
@@ -97,21 +100,25 @@ void MainWindow::calculate_result(double x, double y, double eps) {
         y += dy;
         result[0] = fun1(x, y);
         result[1] = fun2(x, y);
-        norm = sqrt(result[0] * result[0] + result[1] * result[1]);
+        norm = abs((x - x0) + (y - y0));
         ++i;
         double table[]{
                 static_cast<double>(i), x, y, dx, dy, norm
         };
-        int precision = abs(static_cast<int>(log10(eps)));
         text += add_table_row(std::begin(table), std::end(table), 6,
                               [&precision](double arg) { return QString::number(arg, 'f', precision); });
     } while (norm >= eps);
     std::string header_row[]{
             "Итерация", "Значение X", "Значение Y", "Изменение X", "Изменение Y", "Норма"
     };
+    QString ending_row[]{
+            "Итог:", QString::number(x, 'f', precision), QString::number(y, 'f', precision)
+    };
     text.prepend(add_table_row(std::begin(header_row), std::end(header_row), 6,
                                [](const std::string &arg) { return QString::fromStdString(arg); }))
             .prepend(R"(<table width="100%" border="1">)")
+            .append(add_table_row(std::begin(ending_row), std::end(ending_row), 3,
+                                  [](const QString &arg) { return arg; }))
             .append("</table>");
     ui->textEdit->setReadOnly(true);
     set_html(ui->textEdit, text);
