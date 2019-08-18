@@ -71,12 +71,6 @@ private:
         msg_box.exec();
     }
 
-    static QString build_line(int i, double x, double y, double dx, double dy, double norm) {
-        char buf[80];
-        int res = snprintf(buf, sizeof(buf), "\t%d\t||\t%f\t||\t%f\t||\t%f\t||\t%f\t||\t%f\t\n", i, x, y, dx, dy, norm);
-        return QString(buf);
-    }
-
     static double fun1(double x, double y) {
         return sin(y + 0.5) - x - 1;
     }
